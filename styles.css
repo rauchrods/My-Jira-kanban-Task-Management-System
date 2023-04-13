@@ -136,7 +136,7 @@ body {
 .chip {
     border-radius: 20px;
     display: inline-block;
-    font-size: 12px;
+    font-size: 14px;
     margin-right: 5px;
     padding: 2px 8px;
 }
@@ -151,7 +151,10 @@ body {
     color: #fff;
 }
 
-
+.dragging{
+    opacity: 1;
+    border: 2px solid black;
+}
 
 .modal {
     display: none;
