@@ -2,10 +2,13 @@ let addtaskbtn = document.querySelector(".add-task-btn");
 let modaltask = document.querySelector(".modal");
 let form = document.querySelector("#add-task-form");
 let taskmodalclose = document.querySelector(".close");
+let modaladdbutton = document.querySelector("#add-task-btn-modal");
 
-
-
-
+let notstartedarr = [];
+let inprogressarr=[];
+let completedarr=[];
+let global_id=1;
+let editid=-1;
 addtaskbtn.addEventListener("click", () => {
 
     modaltask.style.display = "flex";
@@ -24,56 +27,161 @@ form.addEventListener("submit", (e) => {
     let status = document.querySelector("#status").value;
 
     modaltask.style.display = "none";
-    alert("Task Succesfully added");
+    
     addTask(task, priority, date, status);
 
 });
 
 function addTask(task, priority, date, status) {
-    if (status == "not-started") {
-        let notstartedcontainer = document.querySelector("#not-started");
 
-        notstartedcontainer.innerHTML += `
-      <li class="task-card">
-      <div >${task}</div>
-      <div class="priority chip">${priority}</div>
-      <div class="status chip">${status}</div>
-      <div>DUE:${date}</div>
-      </li>
-      `
+    if(modaladdbutton.innerHTML == "Edit Card"){
+       
+        // let editcardobj = findobj(editid);
+
+        for(let i=0; i<notstartedarr.length;i++){
+            if(notstartedarr[i].id == editid){
+                notstartedarr[i].task = task;
+                notstartedarr[i].priority = priority;
+                notstartedarr[i].date = date;
+                notstartedarr[i].status = status;
+                break;
+            }
+        }
+
+        for(let i=0; i<inprogressarr.length;i++){
+            if(inprogressarr[i].id == editid){
+                inprogressarr[i].task = task;
+                inprogressarr[i].priority = priority;
+                inprogressarr[i].date = date;
+                inprogressarr[i].status = status;
+                break;
+            }
+        }
+
+        for(let i=0; i<completedarr.length;i++){
+            if(completedarr[i].id == editid){
+                completedarr[i].task = task;
+                completedarr[i].priority = priority;
+                completedarr[i].date = date;
+                completedarr[i].status = status;
+                break;
+            }
+        }
+
+        modaladdbutton.innerHTML ="Add Task";
+        alert("Task Edited successfully");
+        printCards();
+    setPriorityColor();
+    dragactions();
+        return;
+    }
+
+
+   let cardobj={
+     id:global_id,
+     task:task,
+     priority:priority,
+     date:date,
+     status:status
+   }
+    global_id++;
+
+    if (status == "not-started") {
+  
+        notstartedarr.push(cardobj);
     }
     else if (status == "in-progress") {
 
-        let inprogresscontainer = document.querySelector("#in-progress");
-
-        inprogresscontainer.innerHTML += `
-      <li class="task-card">
-      <div >${task}</div>
-      <div class="priority chip">${priority}</div>
-      <div class="status chip">${status}</div>
-      <div>DUE:${date}</div>
-      </li>
-      `
+        inprogressarr.push(cardobj);
 
     }
     else if (status == "completed") {
-        let completecontainer = document.querySelector("#completed");
 
-        completecontainer.innerHTML += `
-      <li class="task-card">
-      <div >${task}</div>
-      <div class="priority chip">${priority}</div>
-      <div class="status chip">${status}</div>
-      <div>DUE:${date}</div>
-      </li>
-      `
+        completedarr.push(cardobj);
     }
 
-
+   console.log(cardobj);
+   console.log(notstartedarr, inprogressarr, completedarr);
+   printCards();
     setPriorityColor();
     dragactions();
+    alert("Task Succesfully added");
 }
 
+function printCards() {
+    
+    let str = "";
+
+     let notstartedcontainer = document.querySelector("#not-started");
+     let inprogresscontainer = document.querySelector("#in-progress");
+     let completecontainer = document.querySelector("#completed");
+
+     notstartedarr.forEach(function(cardobj) {
+        str += `
+        <li class="task-card" id="task-card-${cardobj.id}">
+        <div>Task:${cardobj.task}</div>
+        <div class="chip-conatiner">
+            <div class="priority chip">${cardobj.priority}</div>
+            <div class="status chip">${cardobj.status}</div>
+            <div><span class="material-icons">calendar_month</span>
+                <span>${cardobj.date}</span>
+            </div>
+        </div>
+        <div class="task-changes">
+            <span class="material-icons" onclick="editcard(${cardobj.id})">edit</span>
+            <span class="material-icons" onclick="deletecard(${cardobj.id})">delete</span>
+        </div>
+        </li>
+        `
+        
+     });
+     notstartedcontainer.innerHTML = str;
+
+     str="";
+     inprogressarr.forEach(function(cardobj) {
+        str+=`
+        <li class="task-card" id="task-card-${cardobj.id}">
+        <div>Task:${cardobj.task}</div>
+        <div class="chip-conatiner">
+            <div class="priority chip">${cardobj.priority}</div>
+            <div class="status chip">${cardobj.status}</div>
+            <div><span class="material-icons">calendar_month</span>
+                <span>${cardobj.date}</span>
+            </div>
+        </div>
+        <div class="task-changes">
+            <span class="material-icons" onclick="editcard(${cardobj.id})">edit</span>
+            <span class="material-icons" onclick="deletecard(${cardobj.id})">delete</span>
+        </div>
+        </li>        
+        `
+        
+     });
+     inprogresscontainer.innerHTML = str;
+
+      str="";
+     completedarr.forEach(function(cardobj) {
+        str+=`
+        <li class="task-card" id="task-card-${cardobj.id}">
+        <div>Task:${cardobj.task}</div>
+        <div class="chip-conatiner">
+            <div class="priority chip">${cardobj.priority}</div>
+            <div class="status chip">${cardobj.status}</div>
+            <div><span class="material-icons">calendar_month</span>
+                <span>${cardobj.date}</span>
+            </div>
+        </div>
+        <div class="task-changes">
+            <span class="material-icons" onclick="editcard(${cardobj.id})">edit</span>
+            <span class="material-icons" onclick="deletecard(${cardobj.id})">delete</span>
+        </div>
+        </li>  
+
+        `
+        
+     });
+     completecontainer.innerHTML=str;
+}
 
 function setPriorityColor() {
 
@@ -90,7 +198,7 @@ function setPriorityColor() {
             }
         })
     });
-
+     
 }
 
 
@@ -103,13 +211,13 @@ function dragactions() {
 
     taskcards.forEach((taskcard) => {
         taskcard.addEventListener("dragstart", () => {
-           taskcard.classList.add("dragging");
+            taskcard.classList.add("dragging");
         });
     });
-    
+
     taskcards.forEach((taskcard) => {
         taskcard.addEventListener("dragend", () => {
-           taskcard.classList.remove("dragging");
+            taskcard.classList.remove("dragging");
         });
     });
 }
@@ -117,14 +225,60 @@ function dragactions() {
 
 
 
-let draggablecontainers = document.querySelectorAll(".task-list");
+let draggablecontainers = document.querySelectorAll(".task-list");   
 
 draggablecontainers.forEach((draggablecontainer) => {
     draggablecontainer.addEventListener("dragover", (e) => {
-       e.preventDefault();
-       let draggable = document.querySelector(".dragging");
-         console.log(draggable);
-     
-       draggablecontainer.appendChild(draggable);
+        e.preventDefault();
+        let draggable = document.querySelector(".dragging");
+        //  console.log(draggable);
+
+        draggablecontainer.appendChild(draggable);
     });
 });
+
+function editcard(myid){
+    console.log(myid);
+    modaltask.style.display = "flex";
+    
+    modaladdbutton.innerHTML = "Edit Card";
+    let editcardobj = findobj(myid);
+     console.log(editcardobj);
+    document.querySelector("#task-name").value = editcardobj.task;
+    document.querySelector("#priority").value = editcardobj.priority;
+    document.querySelector("#due-date").value = editcardobj.date;
+    document.querySelector("#status").value = editcardobj.status;
+
+    
+     editid=myid;
+    // addTask(editcardobj.task, editcardobj.priority, editcardobj.date, editcardobj.status);
+     
+}
+
+function deletecard(myid){
+    console.log(myid);
+}
+
+
+function findobj(myid){   //find in 3 arrays and returns the object.
+
+    for(let cardobj of notstartedarr){
+        if(cardobj.id==myid){
+            return cardobj;
+        }
+    }
+
+
+    for(let cardobj of inprogressarr){
+        if(cardobj.id==myid){
+            return cardobj;
+        }
+    }
+
+    for(let cardobj of completedarr){
+        if(cardobj.id==myid){
+            return cardobj;
+        }
+    }
+
+}
