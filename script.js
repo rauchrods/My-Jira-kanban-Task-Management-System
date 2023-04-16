@@ -3,6 +3,8 @@ let modaltask = document.querySelector(".modal");
 let form = document.querySelector("#add-task-form");
 let taskmodalclose = document.querySelector(".close");
 let modaladdbutton = document.querySelector("#add-task-btn-modal");
+let searchbox = document.querySelector(".search-input-text");
+
 
 let notstartedarr = [];
 let inprogressarr=[];
@@ -36,8 +38,8 @@ function addTask(task, priority, date, status) {
 
     if(modaladdbutton.innerHTML == "Edit Card"){
        
-        // let editcardobj = findobj(editid);
-
+        let editcardobj = findobj(editid);
+      
         for(let i=0; i<notstartedarr.length;i++){
             if(notstartedarr[i].id == editid){
                 notstartedarr[i].task = task;
@@ -257,6 +259,33 @@ function editcard(myid){
 
 function deletecard(myid){
     console.log(myid);
+
+    for(let i=0;i< notstartedarr.length;i++){
+        if( notstartedarr[i].id==myid){
+             notstartedarr.splice(i,1);
+            break
+        }
+    }
+
+    for(let i=0;i<inprogressarr.length;i++){
+        if(inprogressarr[i].id==myid){
+            inprogressarr.splice(i,1);
+            break
+        }
+    }
+
+    for(let i=0;i<completedarr.length;i++){
+        if(completedarr[i].id==myid){
+            completedarr.splice(i,1);
+            break
+        }
+    }
+
+    alert("Task sucessfully deleted")
+    printCards();
+    setPriorityColor();
+    dragactions();
+    console.log(notstartedarr, inprogressarr, completedarr);
 }
 
 
@@ -282,3 +311,33 @@ function findobj(myid){   //find in 3 arrays and returns the object.
     }
 
 }
+
+
+searchbox.addEventListener("input",()=>{
+
+    let searchedtxt = searchbox.value.trim().toLowerCase();
+
+    document.querySelectorAll(".task-list").forEach((list) => {
+        list.querySelectorAll(".task-card").forEach((taskcard) => {
+         
+            let task = taskcard.querySelector("div:nth-child(1)").textContent.toLowerCase();
+
+            let priority = taskcard.querySelector("div:nth-child(2)>.priority").textContent.toLowerCase();
+            let status = taskcard.querySelector("div:nth-child(2)>.status").textContent.toLowerCase();
+            let date = taskcard.querySelector("div:nth-child(2)>div:nth-child(3)>span:nth-child(2)").textContent.toLowerCase();
+
+            console.log(task,priority,status,date);
+
+            if(task.includes(searchedtxt) || priority.includes(searchedtxt) || status.includes(searchedtxt) || date.includes(searchedtxt)){
+                taskcard.style.display = "flex";
+            }
+            else{
+                taskcard.style.display = "none";
+            }
+
+        });
+    });
+
+
+});
+
