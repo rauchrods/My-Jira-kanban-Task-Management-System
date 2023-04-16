@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url(./images/tactile_noisebk4.webp);
+    background-image: url(./images/struckaxiombk3.webp);
     /* background-size: cover; */
 }
 
@@ -63,7 +63,7 @@ body {
 }
 .column {
     width: 30%;
-    background-color: #f0f0f0;
+    background-color: #e9e7e7;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 6px;
@@ -72,6 +72,7 @@ body {
     max-height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
+    border: 1px solid black;
 }
 
 .column::-webkit-scrollbar{
@@ -119,7 +120,7 @@ body {
     margin-top: 0;
     text-align: center;
     font-size: 1.5rem;
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
 
 .task-list {
@@ -151,6 +152,14 @@ body {
     position: relative;
     row-gap: 15px;
     cursor: pointer;
+}
+.task-list>p{
+ border: 1px solid black;
+ text-align: center;
+ color: black;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 6px;
 }
 .task-card>div{
     /* border: 1px solid black; */
