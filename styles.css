@@ -161,9 +161,11 @@ body {
   background-color: lightgray;
   border-radius: 6px;
 }
-.task-card>div{
-    /* border: 1px solid black; */
-}
+
+/* .task-card>div{
+    border: 1px solid black;
+} */
+
 .task-card>div:nth-child(1){
     font-size: 18px;
     font-weight: bold;

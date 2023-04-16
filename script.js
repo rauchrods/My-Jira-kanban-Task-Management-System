@@ -402,26 +402,26 @@ searchbox.addEventListener("input", () => {
 
 });
 
-function ifnoTaksPresent(){
+function ifnoTaksPresent() {
 
-    document.querySelectorAll(".task-list").forEach((list) =>{
-        if (list.innerHTML == "" ) {
-           list.innerHTML = `
+    document.querySelectorAll(".task-list").forEach((list) => {
+        if (list.innerHTML == "") {
+            list.innerHTML = `
              <p>No Tasks added..</P>
            `
         }
-       
+
     });
-   
+
 }
 
 
- (()=> {
+(() => {
 
     notstartedarr = JSON.parse(localStorage.getItem("notstartedarr")) || [];
     inprogressarr = JSON.parse(localStorage.getItem("inprogressarr")) || [];
     completedarr = JSON.parse(localStorage.getItem("completedarr")) || [];
-      global_id = JSON.parse(localStorage.getItem("jira_globalid")) || 1 ;
+    global_id = JSON.parse(localStorage.getItem("jira_globalid")) || 1;
     printCards();
     setPriorityColor();
     dragactions();
